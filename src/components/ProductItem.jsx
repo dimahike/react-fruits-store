@@ -80,19 +80,8 @@ export const ProductItem = ({
             </Box>
           ) : (
             <Button variant="contained" color="primary" size="small" onClick={onHandleAddProduct}>
-              {addedTotal ? (
-                <>
-                  <span>${totalPriceWithDiscount}</span>
-                  <span style={{ margin: '0 10px' }}>|</span>
-                  <ShoppingCartIcon />
-                  <span style={{ marginLeft: '10px' }}>{totalCount}</span>
-                </>
-              ) : (
-                <>
-                  <ShoppingCartIcon />
-                  <span style={{ marginLeft: '10px' }}>Add To Cart</span>
-                </>
-              )}
+              <ShoppingCartIcon />
+              <span style={{ marginLeft: '10px' }}>Add To Cart</span>
             </Button>
           )}
         </CardActions>
