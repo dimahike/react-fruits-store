@@ -13,22 +13,42 @@ const parseAndFixed = (number) => {
   return parseFloat(number.toFixed(2));
 };
 
+const countDiscount50 = (amountProducts, priceProduct) => {
+  let quantityDiscount = Math.floor(amountProducts / 3);
+
+  return quantityDiscount * (priceProduct / 2);
+};
+
 const cart = (state = initialState, action) => {
+  let currentProductItems;
+  let currentTotalPriceWithDiscount;
+  let currentTotalPriceWithOutDiscount;
+  let currentTotalCount;
+  let discount;
   switch (action.type) {
     case 'ADD_PRODUCT_CART': {
-      let currentProductItems;
-      let currentTotalPrice;
-      let currentTotalCount;
       const product = storeProducts.find((item) => item.id === action.payload);
       if (!state.items[action.payload]) {
         currentProductItems = product;
-        currentTotalPrice = product.price;
+        currentTotalPriceWithDiscount = product.price;
+        currentTotalPriceWithOutDiscount = product.price;
         currentTotalCount = 1;
       }
       if (state.items[action.payload]) {
+        // currentProductItems = state.items[action.payload].item;
+        // currentTotalPrice = state.items[action.payload].totalPrice + product.price;
+        // currentTotalCount = state.items[action.payload].totalCount + 1;
+
         currentProductItems = state.items[action.payload].item;
-        currentTotalPrice = state.items[action.payload].totalPrice + product.price;
         currentTotalCount = state.items[action.payload].totalCount + 1;
+        currentTotalPriceWithOutDiscount = currentTotalCount * product.price;
+
+        if (product.discount) {
+          discount = countDiscount50(currentTotalCount, product.price);
+          currentTotalPriceWithDiscount = currentTotalPriceWithOutDiscount - discount;
+        } else {
+          currentTotalPriceWithDiscount = currentTotalPriceWithOutDiscount;
+        }
       }
 
       const newItems = {
@@ -36,7 +56,10 @@ const cart = (state = initialState, action) => {
         [action.payload]: {
           item: currentProductItems,
           totalCount: currentTotalCount,
-          totalPrice: parseAndFixed(currentTotalPrice),
+
+          // totalPrice: parseAndFixed(currentTotalPrice),
+          totalPrice: currentTotalPriceWithOutDiscount,
+          totalPriceWithDiscount: currentTotalPriceWithDiscount,
         },
       };
 
@@ -49,27 +72,38 @@ const cart = (state = initialState, action) => {
       };
     }
     case 'SUBTRACT_PRODUCT_CART': {
-      const currentPizzaItem = state.items[action.payload];
+      const currentFruitsItem = state.items[action.payload];
+      let stateDiscont = currentFruitsItem.item.discount; // discount have or don`t have
+      const sustractProductTotalPrice = currentFruitsItem.totalPrice - currentFruitsItem.item.price;
+      currentTotalCount = currentFruitsItem.totalCount - 1;
 
-      if (currentPizzaItem.totalCount > 1) {
-        const sustractProductTotalPrice = currentPizzaItem.totalPrice - currentPizzaItem.item.price;
+      if (currentFruitsItem.totalCount > 1) {
+        if (stateDiscont) {
+          discount = countDiscount50(currentTotalCount, currentFruitsItem.item.price);
+          currentTotalPriceWithDiscount = sustractProductTotalPrice - discount;
+          console.log('stateDiscont true', currentTotalPriceWithDiscount);
+        } else {
+          currentTotalPriceWithDiscount = sustractProductTotalPrice;
+          console.log('stateDiscont false', currentTotalPriceWithDiscount);
+        }
 
         return {
           ...state,
           items: {
             ...state.items,
             [action.payload]: {
-              item: currentPizzaItem.item,
-              totalCount: currentPizzaItem.totalCount - 1,
+              item: currentFruitsItem.item,
+              totalCount: currentTotalCount,
               totalPrice: sustractProductTotalPrice,
+              totalPriceWithDiscount: currentTotalPriceWithDiscount,
             },
           },
           totalCount: state.totalCount - 1,
-          totalPrice: state.totalPrice - currentPizzaItem.item.price,
+          totalPrice: state.totalPrice - currentFruitsItem.item.price,
         };
       }
 
-      if (currentPizzaItem.totalCount === 1) {
+      if (currentFruitsItem.totalCount === 1) {
         delete state.items[action.payload];
         console.log(' state.items', state.items[action.payload]);
         console.log(' state.items', state.items);
