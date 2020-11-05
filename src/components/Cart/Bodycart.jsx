@@ -5,6 +5,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 
+import discountImage from '../../img/discount.png';
+
 const useStyles = makeStyles((theme) => ({
   image: {
     height: '100px',
@@ -22,6 +24,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  discountImg: {
+    height: '35px',
+    position: 'absolute',
+  },
 }));
 
 export const Bodycart = ({
@@ -31,8 +37,7 @@ export const Bodycart = ({
   onClickDeleteProduct,
 }) => {
   const classes = useStyles();
-
-  console.log('product.item.imgUrl', product.item.imgUrl);
+  const discount = product.item.discount;
 
   return (
     <Box
@@ -46,6 +51,7 @@ export const Bodycart = ({
       <Grid container key={`product_from_cart_${product.item.id}`} alignItems="center">
         <Grid item xs={12} sm={12} md={2} className={classes.image}>
           <Box xs={{ height: '100px' }}>
+            {discount && <img className={classes.discountImg} src={discountImage} alt="discount" />}
             <img src={product.item.imgUrl} alt={product.item.title} style={{ maxHeight: '100%' }} />
           </Box>
         </Grid>
@@ -85,6 +91,11 @@ export const Bodycart = ({
             </Box>
             <span>$ {product.totalPrice}</span>
           </Typography>
+          {product.item.discount && (
+            <Typography variant="body1" color="secondary">
+              DISCOUNTED $ {product.totalPriceWithDiscount}
+            </Typography>
+          )}
         </Grid>
       </Grid>
     </Box>

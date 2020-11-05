@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { ProductItem } from './ProductItem';
 import { setProducts } from '../redux/actions/products';
-import { addProductToCart } from '../redux/actions/cart';
+import { addProductToCart, subtractProductToCart } from '../redux/actions/cart';
 
 const useStyles = makeStyles({
   root: {
@@ -28,6 +28,10 @@ export const ProductList = () => {
     dispatch(addProductToCart(id));
   };
 
+  const onSubstractProductToCart = (id) => {
+    dispatch(subtractProductToCart(id));
+  };
+
   return (
     <div id="product-list">
       <div className={classes.root}>
@@ -48,6 +52,7 @@ export const ProductList = () => {
                     {...obj}
                     addedTotal={cartItems[obj.id] ? cartItems[obj.id] : ''}
                     onClickAddProduct={onAddProductToCart}
+                    onClickSubtractProduct={onSubstractProductToCart}
                   />
                 </Grid>
               ))}

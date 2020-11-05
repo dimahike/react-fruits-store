@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Button } from '@material-ui/core';
+import { Box, Button, Typography } from '@material-ui/core';
 
 import {
   addProductToCart,
@@ -62,18 +62,24 @@ export const CartWithProducts = ({ cartProducts }) => {
               />
             ))}
           </div>
-
-          <Box display="flex" justifyContent="flex-end" mt={4}>
-            <Button variant="outlined" color="secondary" onClick={onClickClearCart}>
-              clear cart
-            </Button>
-            <Button
-              onClick={onClickOrder}
-              variant="contained"
-              color="primary"
-              style={{ marginLeft: '15px' }}>
-              Order
-            </Button>
+          <Box display="flex" justifyContent="flex-end;">
+            <Box mt={4} style={{ width: 'fit-content' }}>
+              <Button variant="outlined" color="secondary" onClick={onClickClearCart}>
+                clear cart
+              </Button>
+              <Box mt={2} mb={2}>
+                <Typography variant="h6">
+                  Total Price:
+                  <ul>
+                    <p>Discounted: $ {cartProducts.totalPriceWithDiscount}</p>
+                    <p>No Discount: $ {cartProducts.totalPrice}</p>
+                  </ul>
+                </Typography>
+              </Box>
+              <Button onClick={onClickOrder} variant="contained" color="primary">
+                Order
+              </Button>
+            </Box>
           </Box>
         </div>
       </div>

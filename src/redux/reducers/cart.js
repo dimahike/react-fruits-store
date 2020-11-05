@@ -8,6 +8,8 @@ const initialState = {
 
 const getTotalCount = (obj) => Object.values(obj).reduce((sum, obj) => obj.totalCount + sum, 0);
 const getTotalPrice = (obj) => Object.values(obj).reduce((sum, obj) => obj.totalPrice + sum, 0);
+const getTotalPriceWithDiscount = (obj) =>
+  Object.values(obj).reduce((sum, obj) => obj.totalPriceWithDiscount + sum, 0);
 
 const parseAndFixed = (number) => {
   return parseFloat(number.toFixed(2));
@@ -69,6 +71,7 @@ const cart = (state = initialState, action) => {
         items: newItems,
         totalCount: getTotalCount(newItems),
         totalPrice: parseAndFixed(getTotalPrice(newItems)),
+        totalPriceWithDiscount: parseAndFixed(getTotalPriceWithDiscount(newItems)),
       };
     }
     case 'SUBTRACT_PRODUCT_CART': {
@@ -114,6 +117,7 @@ const cart = (state = initialState, action) => {
           },
           totalCount: state.totalCount - 1,
           totalPrice: parseAndFixed(getTotalPrice(state.items)),
+          totalPriceWithDiscount: parseAndFixed(getTotalPriceWithDiscount(state.items)),
         };
       } else {
         console.log('something ran wrong in subtractProductToCart');
@@ -132,6 +136,7 @@ const cart = (state = initialState, action) => {
         },
         totalCount: totalCountItems,
         totalPrice: parseAndFixed(getTotalPrice(state.items)),
+        totalPriceWithDiscount: parseAndFixed(getTotalPriceWithDiscount(state.items)),
       };
     }
 

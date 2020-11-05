@@ -5,7 +5,6 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-// import './header.scss';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -19,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
   },
   cartButton: {
     padding: theme.spacing(1),
-    // marginRight: theme.spacing(2),
-    // border: '2px solid #fff',
-    // color: '#fff',
   },
   title: {
     flexGrow: 1,
@@ -57,7 +53,7 @@ export const Header = () => {
               style={{ padding: '10px 20px' }}>
               {cart.totalCount ? (
                 <>
-                  <span>${cart.totalPrice}</span>
+                  <span>${cart.totalPriceWithDiscount}</span>
                   <span style={{ margin: '0 10px' }}>|</span>
                   <ShoppingCartIcon />
                   <span style={{ marginLeft: '10px' }}>{cart.totalCount}</span>
